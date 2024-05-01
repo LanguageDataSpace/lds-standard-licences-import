@@ -1,0 +1,22 @@
+{
+    "lds_proxy_1": {
+        "Apache-2.0": "2914396d-0752-4e62-b13f-30756810e43c",
+        "Cc010Universal": "bb5b7234-8fe2-4126-922e-6e3612c6e7d8",
+        "CC-BY-4.0": "60b27449-965a-4d72-bcf4-a0f0b390416e",
+        "CC-BY-ND-4.0": "12b6a1a5-50f4-4058-ab55-d19bb74e50b8",
+        "CC-BY-NC-4.0": "c1a6ad18-570c-42e1-b91c-d30022952f72",
+        "CC-BY-SA-4.0": "cfa01528-4762-4acb-ba7e-383ea42ea897",
+        "CC-BY-NC-ND-4.0": "c6d6a746-9aaf-44a7-9c79-6173f0cb74d0",
+        "CC-BY-NC-SA-4.0": "56554c0c-180d-49b9-8350-d9ac0585223d"
+    },
+    "lds_proxy_2": {
+        "Apache-2.0": "06233422-db2e-42ca-9cca-4f201dd027e5",
+        "Cc010Universal": "76b8bcce-4a47-4898-b716-b4f935ad8aad",
+        "CC-BY-4.0": "7c5572f2-695c-44c1-aba1-1615fb0546bd",
+        "CC-BY-ND-4.0": "d2169e0e-abfa-41ab-94f1-74597dab0dd3",
+        "CC-BY-NC-4.0": "43cc8d3a-f938-4cf7-b9af-c2bb46c8d3d9",
+        "CC-BY-SA-4.0": "6185f8f1-de44-415b-8e4d-7e4c57297bcb",
+        "CC-BY-NC-ND-4.0": "84013244-514c-478a-a03a-64acf282000b",
+        "CC-BY-NC-SA-4.0": "0d373253-090b-429b-8bf8-fd9163838ff5"
+    }
+}

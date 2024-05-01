@@ -1,0 +1,138 @@
+{
+    "@context": {
+        "cc": "http://creativecommons.org/ns#",
+        "dalicc": "https://dalicc.net/ns#",
+        "dalicclib": "https://dalicc.net/licenselibrary/",
+        "dcmitype": "http://purl.org/dc/dcmitype/",
+        "dcat": "http://www.w3.org/ns/dcat#",
+        "dct": "http://purl.org/dc/terms/",
+        "foaf": "http://xmlns.com/foaf/0.1/",
+        "odrl": "http://www.w3.org/ns/odrl/2/",
+        "osl": "http://opensource.org/licenses/",
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "scho": "http://schema.org/",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "edc": "https://w3id.org/edc/v0.0.1/ns/"
+    },
+    "edc:policy": {
+        "@id": "dalicclib:Cc010Universal",
+        "@type": "odrl:Set",
+        "cc:jurisdiction": {
+            "@id": "dalicc:worldwide"
+        },
+        "cc:legalcode": {
+            "@id": "https://creativecommons.org/publicdomain/zero/1.0/legalcode"
+        },
+        "cc:license": {
+            "@id": "dalicclib:CC-BY-4.0"
+        },
+        "dct:alternative": [
+            "CC Zero ",
+            "CC0 1.0",
+            "CC0 1.0 Universal",
+            "CC0 1.0 Universal Public Domain Dedication",
+            "Creative Commons Zero 1.0 Universal"
+        ],
+        "dct:publisher": "Creative Commons",
+        "dct:source": {
+            "@id": "https://creativecommons.org/publicdomain/zero/1.0/"
+        },
+        "dct:title": {
+            "@language": "en",
+            "@value": "CC0 1.0 Universal (CC0 1.0) Public Domain Dedication"
+        },
+        "odrl:obligation": null,
+        "odrl:permission": [
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "odrl:derive"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "dalicc:ModifiedWorks"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "dalicc:chargeDistributionFee"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "odrl:display"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "odrl:distribute"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "odrl:modify"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "odrl:present"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "odrl:reproduce"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "cc:CommercialUse"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "cc:DerivativeWorks"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "dalicc:ChangeLicense"
+                }
+            }
+        ],
+        "odrl:prohibition": {
+            "@type": "odrl:Prohibition",
+            "odrl:action": {
+                "@id": "dalicc:promote"
+            },
+            "odrl:remedy": null
+        },
+        "odrl:target": {
+            "@type": "odrl:AssetCollection",
+            "dct:type": [
+                {
+                    "@id": "dcmitype:Dataset"
+                },
+                {
+                    "@id": "dalicc:CreativeWork"
+                }
+            ]
+        },
+        "dalicc:LiabilityLimitation": "No trademark or patent rights held by Affirmer are waived, abandoned, surrendered, licensed or otherwise affected by this document.\r\nAffirmer disclaims responsibility for clearing rights of other persons that may apply to the Work or any use thereof, including without limitation any person's Copyright and Related Rights in the Work. Further, Affirmer disclaims responsibility for obtaining any necessary consents, permissions or other rights required for any use of the Work.",
+        "dalicc:WarrantyDisclaimer": "Affirmer offers the Work as-is and makes no representations or warranties of any kind concerning the Work, express, implied, statutory or otherwise, including without limitation warranties of title, merchantability, fitness for a particular purpose, non infringement, or the absence of latent or other defects, accuracy, or the present or absence of errors, whether or not discoverable, all to the greatest extent permissible under applicable law.\r\nAffirmer understands and acknowledges that Creative Commons is not a party to this document and has no duty or obligation with respect to this CC0 or use of the Work.",
+        "dalicc:validityType": {
+            "@id": "dalicc:perpetual"
+        }
+    }
+}
