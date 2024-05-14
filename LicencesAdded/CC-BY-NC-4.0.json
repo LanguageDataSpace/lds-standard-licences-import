@@ -1,0 +1,155 @@
+{
+    "@context": {
+        "cc": "http://creativecommons.org/ns#",
+        "dalicc": "https://dalicc.net/ns#",
+        "dalicclib": "https://dalicc.net/licenselibrary/",
+        "dcmitype": "http://purl.org/dc/dcmitype/",
+        "dcat": "http://www.w3.org/ns/dcat#",
+        "dct": "http://purl.org/dc/terms/",
+        "foaf": "http://xmlns.com/foaf/0.1/",
+        "odrl": "http://www.w3.org/ns/odrl/2/",
+        "osl": "http://opensource.org/licenses/",
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "scho": "http://schema.org/",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "prov": "http://www.w3.org/ns/prov#",
+        "edc": "https://w3id.org/edc/v0.0.1/ns/"
+    },
+    "edc:policy": {
+        "@id": "dalicclib:CC-BY-NC-4.0",
+        "@type": "odrl:Set",
+        "cc:jurisdiction": {
+            "@id": "dalicc:worldwide"
+        },
+        "cc:legalcode": {
+            "@id": "https://creativecommons.org/licenses/by-nc/4.0/legalcode"
+        },
+        "cc:license": {
+            "@id": "dalicclib:CC-BY-4.0"
+        },
+        "dct:alternative": [
+            "Attribution NonCommercial 4.0 International",
+            "Attribution-NonCommercial 4.0",
+            "Attribution-NonCommercial 4.0 International",
+            "CC BY NC 4.0",
+            "CC BY NC 4.0 International",
+            "CC BY-NC 4.0",
+            "CC BY-NC 4.0 International",
+            "CC-BY-NC 4.0",
+            "CC-BY-NC 4.0 International",
+            "Creative Commons BY-NC 4.0",
+            "Creative Commons BY-NC 4.0 International"
+        ],
+        "dct:publisher": "Creative Commons",
+        "dct:source": {
+            "@id": "https://creativecommons.org/licenses/by-nc/4.0/"
+        },
+        "dct:title": {
+            "@language": "en",
+            "@value": "Creative Commons Attribution-NonCommercial 4.0 International"
+        },
+        "odrl:obligation": null,
+        "odrl:permission": [
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "odrl:display"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "odrl:present"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "odrl:reproduce"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "cc:DerivativeWorks"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "dalicc:ModifiedWorks"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "dalicc:chargeDistributionFee"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "odrl:distribute"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "odrl:modify"
+                }
+            },
+            {
+                "@type": "odrl:Permission",
+                "odrl:action": {
+                    "@id": "odrl:derive"
+                }
+            }
+        ],
+        "odrl:prohibition": [
+            {
+                "@type": "odrl:Prohibition",
+                "odrl:action": {
+                    "@id": "cc:CommercialUse"
+                },
+                "odrl:remedy": null
+            },
+            {
+                "@type": "odrl:Prohibition",
+                "odrl:action": {
+                    "@id": "dalicc:ChangeLicense"
+                },
+                "odrl:remedy": null
+            },
+            {
+                "@type": "odrl:Prohibition",
+                "odrl:action": {
+                    "@id": "dalicc:promote"
+                },
+                "odrl:remedy": null
+            }
+        ],
+        "odrl:target": {
+            "@type": "odrl:AssetCollection",
+            "dct:type": [
+                {
+                    "@id": "dcmitype:Dataset"
+                },
+                {
+                    "@id": "dalicc:CreativeWork"
+                }
+            ]
+        },
+        "prov:hadPrimarySource": {
+            "@id": "dalicclib:CC-BY-NC-4.0"
+        },
+        "foaf:logo": {
+            "@id": "https://licensebuttons.net/l/by-nc/4.0/88x31.png"
+        },
+        "dalicc:LiabilityLimitation": "To the extent possible, in no event will the Licensor be liable to You on any legal theory (including, without limitation, negligence) or otherwise for any direct, special, indirect, incidental, consequential, punitive, exemplary, or other losses, costs, expenses, or damages arising out of this Public License or use of the Licensed Material, even if the Licensor has been advised of the possibility of such losses, costs, expenses, or damages. Where a limitation of liability is not allowed in full or in part, this limitation may not apply to You.",
+        "dalicc:WarrantyDisclaimer": "Unless otherwise separately undertaken by the Licensor, to the extent possible, the Licensor offers the Licensed Material as-is and as-available, and makes no representations or warranties of any kind concerning the Licensed Material, whether express, implied, statutory, or other. This includes, without limitation, warranties of title, merchantability, fitness for a particular purpose, non-infringement, absence of latent or other defects, accuracy, or the presence or absence of errors, whether or not known or discoverable. Where disclaimers of warranties are not allowed in full or in part, this disclaimer may not apply to You.",
+        "dalicc:validityType": {
+            "@id": "dalicc:perpetual"
+        }
+    }
+}

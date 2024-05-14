@@ -1,0 +1,42 @@
+{
+    "http://ldssetup.ilsp.gr:8081": {
+        "Apache-2.0": "5672f7ac-c6d0-4d77-9a6f-a235ae897555",
+        "Cc010Universal": "706486c1-810c-4496-99e2-bbab60610fb6",
+        "CC-BY-4.0": "96f3b84f-7651-463c-87e0-0619e477b66f",
+        "CC-BY-ND-4.0": "dc425d3e-83e8-425a-8b02-4bc789c307d3",
+        "CC-BY-NC-4.0": "4d2f5182-f8f8-47bd-8256-75142dba7661",
+        "CC-BY-SA-4.0": "0fb35dbc-d432-4b0a-ab91-5db857bcee90",
+        "CC-BY-NC-ND-4.0": "9930cd62-e648-4eda-bc3c-08d03a13a5ca",
+        "CC-BY-NC-SA-4.0": "1bc541f5-8e6c-459a-8d2b-6e2dcec6ed7d",
+        "PublicDomain": "7db96799-02c8-415f-99e8-0797d7a3472b",
+        "UnderPSI": "aca54e70-d24e-470e-a03b-8f440aefdf5a",
+        "cc-by2.0": "6b19373f-d36d-48a8-929a-ddc73c6d9a39",
+        "cc-by2.5se": "c5f0af45-ab96-4c5f-840d-42bc0f84003e",
+        "cc-by3.0": "150fa6dc-e3ee-4d1c-a6ee-7169b934a7f2",
+        "cc-by-nd3.0": "89885eed-e00e-4b63-8f69-1766a218990e",
+        "cc-by-nc-nd3.0": "d76aeb4a-f10d-415f-b299-189c6664e239",
+        "cc-by-nc-sa2.0": "1c3c3f12-f018-4cc7-b6a1-0d813afb6fa7",
+        "cc-by-nc-sa3.0": "349b34b0-1d6d-4d69-822a-145b21ccb637",
+        "cc-by-sa3.0": "93d8a268-32e6-4c07-882f-1f642830b61d"
+    },
+    "http://ldssetup.ilsp.gr:7081": {
+        "Apache-2.0": "bdb89b54-4633-40b8-92db-d2afd6a08fec",
+        "Cc010Universal": "85bef9ec-724f-43c4-b48d-642f33a43b3e",
+        "CC-BY-4.0": "8a42f19e-7696-41bd-b100-83c48d126e66",
+        "CC-BY-ND-4.0": "cdf05abf-7827-4152-bf97-f811d81e7603",
+        "CC-BY-NC-4.0": "abe068d5-f810-4d5e-9e05-ec3b75164ca6",
+        "CC-BY-SA-4.0": "9def7c4e-b3cb-4aa3-99c1-34024e96fea5",
+        "CC-BY-NC-ND-4.0": "eef47b94-868c-4ae5-bac6-fd42d5638afb",
+        "CC-BY-NC-SA-4.0": "863cac3e-15ee-42e3-81e8-9146f8fa4cea",
+        "PublicDomain": "c6ddeede-575b-40e3-879a-ea83042efa99",
+        "UnderPSI": "62c3438a-5526-4a81-bc5b-e96970889c4d",
+        "cc-by2.0": "9f50b35f-ce82-4d04-93f4-8993b0c5d69e",
+        "cc-by2.5se": "821dd149-409a-4c26-9317-6510b9cb2094",
+        "cc-by3.0": "f2ea339a-0b21-4673-9b11-9a46de4cb7df",
+        "cc-by-nd3.0": "77035fd1-85de-4ea4-aab8-5c081eeb5c8c",
+        "cc-by-nc-nd3.0": "3a1f3c1e-a9fa-4792-8b1b-f781363d7611",
+        "cc-by-nc-sa2.0": "30dd7cf5-f772-4f60-8464-728567f94318",
+        "cc-by-nc-sa3.0": "7c0fdc4d-8344-47fe-a4e6-16a02f33fdfb",
+        "cc-by-sa3.0": "c79f7357-b2a1-44b4-9bcf-ecf73048b32d"
+    }
+}
