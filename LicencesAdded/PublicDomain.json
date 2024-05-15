@@ -108,6 +108,22 @@
             "dct:type": {
                 "@id": "dcmitype:Dataset"
             }
+        },
+        "prov:hadPrimarySource": {
+            "@id": "dalicclib:OdcPublicDomainDedicationAndLicence"
+        },
+        "prov:wasAttributedTo": {
+            "@type": [
+                "foaf:Project",
+                "prov:Agent"
+            ],
+            "foaf:homepage": {
+                "@id": "https://www.dalicc.net/"
+            },
+            "foaf:name": {
+                "@language": "en",
+                "@value": "DALICC - Data Licenses Clearance Center"
+            }
         }
     }
 }

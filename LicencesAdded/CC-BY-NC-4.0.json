@@ -143,6 +143,19 @@
         "prov:hadPrimarySource": {
             "@id": "dalicclib:CC-BY-NC-4.0"
         },
+        "prov:wasAttributedTo": {
+            "@type": [
+                "foaf:Project",
+                "prov:Agent"
+            ],
+            "foaf:homepage": {
+                "@id": "https://www.dalicc.net/"
+            },
+            "foaf:name": {
+                "@language": "en",
+                "@value": "DALICC - Data Licenses Clearance Center"
+            }
+        },
         "foaf:logo": {
             "@id": "https://licensebuttons.net/l/by-nc/4.0/88x31.png"
         },

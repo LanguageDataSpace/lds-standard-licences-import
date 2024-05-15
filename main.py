@@ -6,7 +6,7 @@ import sys
 
 import pyld
 import requests
-from rdflib import Graph, Literal, RDF, Namespace, RDFS, DCTERMS, PROV
+from rdflib import Graph, Literal, RDF, Namespace, RDFS, DCTERMS, PROV, FOAF
 
 dalicc_frame = {
     "@context": {
@@ -29,20 +29,33 @@ dalicc_frame = {
     "odrl:permission": {"@type": "odrl:Permission", "odrl:duty": {"@type": "odrl:Duty"}},
     "odrl:prohibition": {"@type": "odrl:Prohibition", "odrl:remedy": {"@type": "odrl:Duty"}},
     "odrl:obligation": {"@type": "odrl:Duty", "odrl:consequence": {"@type": "odrl:Duty"}},
+    "prov:wasAttributedTo": {},
 }
 
 
-def get_standard_licence_odrl_dalicc_api(licence_id: str, folder_init: str, folder_added: str) -> str:
-    # Get licence from DALICC API
-    url = "https://api.dalicc.net/licenselibrary/license/{}?format=ttl&download=true"
-    response = requests.get(url.format(licence_id))
-    return response.text
+def retrieve_licences(licences_id: list, folder_init: str, from_dalicc: bool):
+    for id in licences_id:
+        if from_dalicc:
+            # Get licence from DALICC API
+            url = "https://api.dalicc.net/licenselibrary/license/{}?format=ttl&download=true"
+            response = requests.get(url.format(id))
+            initial_policy = response.text
+        else:
+            # Get licence from RDF License (Victor's service)
+            url = "https://raw.githubusercontent.com/oeg-upm/licensius/master/licensius-ws/src/main/resources/rdflicenses/{}.ttl"
+            response = requests.get(url.format(id))
+            initial_policy = response.text
+
+        # Write initial license
+        with open(folder_init + '/{}.ttl'.format(id), "w") as init_file:
+            init_file.write(initial_policy)
 
 
-def transform_licence_json_ld(licence_text: str) -> dict:
+def transform_licence_json_ld(licence_text: str, attribution_text: str) -> dict:
     # Load licence to RDF graph and export to json-ld
     g = Graph()
     g.parse(data=licence_text)
+    g.parse(data=attribution_text)
 
     # Bind the FOAF namespace to a prefix for more readable output
     odrl = Namespace('http://www.w3.org/ns/odrl/2/')
@@ -70,6 +83,16 @@ def transform_licence_json_ld(licence_text: str) -> dict:
     # Add prov:hadPrimarySource the initial policy IRI
     for policy in g.subjects(RDF.type, odrl.Set):
         g.add((policy, PROV.hadPrimarySource, policy))
+    # Add prov:wasAttributedTo the appropriated
+    for policy in g.subjects(RDF.type, odrl.Set):
+        # Person
+        attribution_to_person = g.subjects(RDF.type, FOAF.Person)
+        for person in attribution_to_person:
+            g.add((policy, PROV.wasAttributedTo, person))
+        # Project
+        attribution_to_project = g.subjects(RDF.type, FOAF.Project)
+        for project in attribution_to_project:
+            g.add((policy, PROV.wasAttributedTo, project))
     # Add rdf:type Permission if missing
     for permission in g.objects(None, odrl.permission):
         if (permission, RDF.type, None) not in g:
@@ -126,33 +149,19 @@ def transform_licence_json_ld(licence_text: str) -> dict:
     return edc_licence_framed_json_ld
 
 
-def retrieve_licences(licences_id: list, folder_init: str, from_dalicc: bool):
+def transform_licences(licences_id: list, folder_init: str, folder_added: str, prov_attribution_file: str):
     for id in licences_id:
-        if from_dalicc:
-            # Get licence from DALICC API
-            url = "https://api.dalicc.net/licenselibrary/license/{}?format=ttl&download=true"
-            response = requests.get(url.format(id))
-            initial_policy = response.text
-        else:
-            # Get licence from RDF License (Victor's service)
-            url = "https://raw.githubusercontent.com/oeg-upm/licensius/master/licensius-ws/src/main/resources/rdflicenses/{}.ttl"
-            response = requests.get(url.format(id))
-            initial_policy = response.text
-
-        # Write initial license
-        with open(folder_init + '/{}.ttl'.format(id), "w") as init_file:
-            init_file.write(initial_policy)
-
-
-def transform_licences(licences_id: list, folder_init: str, folder_added: str):
-    for id in licences_id:
-        # Read json-ld file with policy
+        # Read ttl file with policy
         f = open(folder_init + '/{}.ttl'.format(id), "r")
-        # Reading from file
         initial_policy = f.read()
-        # Closing file
         f.close()
-        transformed_policy = transform_licence_json_ld(initial_policy)
+
+        # Read ttl file with provenance attribution
+        f = open('./{}'.format(prov_attribution_file), "r")
+        prov_attribution_text = f.read()
+        f.close()
+
+        transformed_policy = transform_licence_json_ld(initial_policy, prov_attribution_text)
         # Write transformed license
         with open(folder_added + '/{}.json'.format(id), "w") as tranformed_file:
             tranformed_file.write(json.dumps(transformed_policy, indent=4))
@@ -184,7 +193,10 @@ if __name__ == "__main__":
     lds_proxy_create_policy_endpoint = config['DEFAULT']['create_policy_endpoint']
     notes = dict()
     dalicc_licences_id = ast.literal_eval(config['DEFAULT']['dalicc_licences_id'])
+    dalicc_attribution_file = config['DEFAULT']['dalicc_attribution_file']
+
     rdfLicense_licences_id = ast.literal_eval(config['DEFAULT']['rdfLicense_licences_id'])
+    rdfLicense_attribution_file = config['DEFAULT']['rdfLicense_attribution_file']
 
     # Remove 1st argument from the
     # list of command line arguments
@@ -215,10 +227,17 @@ if __name__ == "__main__":
             elif currentArgument in ("-t", "--Transform"):
                 # Transform from ttl to edc policy
                 print('Transforming to EDC policy representation')
-                transform_licences(dalicc_licences_id+rdfLicense_licences_id,
+                transform_licences(dalicc_licences_id,
                                    config['DEFAULT']['folder_licences_init'],
                                    config['DEFAULT']['folder_licences_added'],
+                                   dalicc_attribution_file,
                                    )
+                transform_licences(rdfLicense_licences_id,
+                                   config['DEFAULT']['folder_licences_init'],
+                                   config['DEFAULT']['folder_licences_added'],
+                                   rdfLicense_attribution_file
+                                   )
+
             elif currentArgument in ("-a", "--Add"):
                 # Add policies to connectors
                 print('Adding EDC policies to connectors')

@@ -55,6 +55,19 @@
         "odrl:prohibition": null,
         "prov:hadPrimarySource": {
             "@id": "http://purl.org/NET/rdflicense/cc-by3.0"
+        },
+        "prov:wasAttributedTo": {
+            "@type": [
+                "foaf:Person",
+                "prov:Person"
+            ],
+            "foaf:homepage": {
+                "@id": "http://www.cosasbuenas.es/"
+            },
+            "foaf:name": {
+                "@language": "en",
+                "@value": "V\u00edctor Rodr\u00edguez Doncel"
+            }
         }
     }
 }
