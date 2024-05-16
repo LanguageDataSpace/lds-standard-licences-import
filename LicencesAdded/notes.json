@@ -38,5 +38,25 @@
         "cc-by-nc-sa2.0": "30dd7cf5-f772-4f60-8464-728567f94318",
         "cc-by-nc-sa3.0": "7c0fdc4d-8344-47fe-a4e6-16a02f33fdfb",
         "cc-by-sa3.0": "c79f7357-b2a1-44b4-9bcf-ecf73048b32d"
+    },
+        "http://ldssetup.ilsp.gr:6081": {
+        "Apache-2.0": "13b05c24-1020-4341-9384-ac27ed606752",
+        "Cc010Universal": "bf72de1d-c1f9-4313-8ea1-165b1e743ab9",
+        "CC-BY-4.0": "4d487b83-76a6-405d-a26a-e7032b02283d",
+        "CC-BY-ND-4.0": "e412c186-2ef0-40ea-83e2-a437f7356c95",
+        "CC-BY-NC-4.0": "aae8f8ef-8e71-4e6b-988c-c9446d7a40c0",
+        "CC-BY-SA-4.0": "6fb1156b-d568-48c2-a46b-b23b9d9b6264",
+        "CC-BY-NC-ND-4.0": "bc5eadf6-11f8-46b2-bbca-f543554a90cf",
+        "CC-BY-NC-SA-4.0": "df4db035-c516-4320-818d-7bdd57924241",
+        "PublicDomain": "a408c74e-9288-47f6-a5b8-e8a229a926c2",
+        "UnderPSI": "32e6927a-972c-4a78-b1e5-f41f88bc4bde",
+        "cc-by2.0": "14ee54e0-5476-4e87-8c61-e48594683594",
+        "cc-by2.5se": "e0769da7-e1de-43ba-8371-d44694582acc",
+        "cc-by3.0": "d83b8003-4408-4c46-96ea-ddc55a6d201d",
+        "cc-by-nd3.0": "f51d6ea6-624b-4942-8718-de4eef5d7b14",
+        "cc-by-nc-nd3.0": "a6451692-365c-490e-9ca7-5bdc079ee98b",
+        "cc-by-nc-sa2.0": "d1344a1b-2daa-474f-8c9a-69bc04e4bba9",
+        "cc-by-nc-sa3.0": "8e0aa3ae-5dce-4723-a5f6-f86cf0e43358",
+        "cc-by-sa3.0": "d64eac15-92a1-4529-a7ea-a638335f022d"
     }
 }
