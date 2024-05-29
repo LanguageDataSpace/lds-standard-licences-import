@@ -33,29 +33,38 @@ dalicc_frame = {
 }
 
 
-def retrieve_licences(licences_id: list, folder_init: str, from_dalicc: bool):
+def retrieve_licences(licences_id: list, folder_init: str, source: str):
     for id in licences_id:
-        if from_dalicc:
+        print(f'Retrieving policy {id} from {source}')
+        if source == 'DALICC':
             # Get licence from DALICC API
             url = "https://api.dalicc.net/licenselibrary/license/{}?format=ttl&download=true"
             response = requests.get(url.format(id))
             initial_policy = response.text
-        else:
+        elif source == 'Victor':
             # Get licence from RDF License (Victor's service)
             url = "https://raw.githubusercontent.com/oeg-upm/licensius/master/licensius-ws/src/main/resources/rdflicenses/{}.ttl"
             response = requests.get(url.format(id))
             initial_policy = response.text
+        elif source == 'SPDX':
+            # Get licence from SPDX
+            url = "https://raw.githubusercontent.com/spdx/license-list-data/main/rdfturtle/{}.ttl"
+            response = requests.get(url.format(id))
+            initial_policy = response.text
+
 
         # Write initial license
         with open(folder_init + '/{}.ttl'.format(id), "w") as init_file:
             init_file.write(initial_policy)
 
 
-def transform_licence_json_ld(licence_text: str, attribution_text: str) -> dict:
+def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_text: str) -> dict:
     # Load licence to RDF graph and export to json-ld
     g = Graph()
     g.parse(data=licence_text)
     g.parse(data=attribution_text)
+    if spdx_text is not None:
+        g.parse(data=spdx_text)
 
     # Bind the FOAF namespace to a prefix for more readable output
     odrl = Namespace('http://www.w3.org/ns/odrl/2/')
@@ -63,22 +72,42 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str) -> dict:
     # Bind the CC namespace to a prefix for more readable output
     cc = Namespace('http://creativecommons.org/ns#')
     g.bind("cc", cc)
+    # Bind the SPDX namespace to a prefix for more readable output
+    spdx = Namespace('http://spdx.org/rdf/terms#')
+    g.bind("spdx", spdx)
+
     # Replace odrl:Policy with odrl:Set
     for policy in g.subjects(RDF.type, odrl.Policy):
         g.add((policy, RDF.type, odrl.Set))
         g.remove((policy, RDF.type, odrl.Policy))
-    # If policy has rdfs:label copy to dct:title with 'en' lang string and remove it
+
+    # Victor - Fix name,
     for policy in g.subjects(RDF.type, odrl.Set):
         if (policy, RDFS.label, None) in g:
-            title = g.value(policy, RDFS.label)
-            g.add((policy, DCTERMS.title, Literal(title, lang="en")))
-            g.remove((policy, RDFS.label, title))
-    # if policy.legalcode is Literal copy to dct:description and remove it
+            init_title = g.value(policy, RDFS.label)
+            g.remove((policy, RDFS.label, init_title))
+            # If respective spdx licence exists
+            if spdx_text is not None:
+                # remove rdfs:label, get spdx_name and  copy to dct:title with 'en' lang string
+                for spdx_policy in g.subjects(RDF.type, spdx.ListedLicense):
+                    title = g.value(spdx_policy, spdx.name)
+                    g.add((policy, DCTERMS.title, Literal(title, lang="en")))
+            else:
+                g.add((policy, DCTERMS.title, Literal(init_title, lang="en")))
+
+    # Victor - if policy.legalcode is Literal copy to dct:description and remove it
     for policy in g.subjects(RDF.type, odrl.Set):
         legal_code = g.value(policy, cc.legalcode)
         if isinstance(legal_code, Literal):
             g.add((policy, DCTERMS.description, legal_code))
             g.remove((policy, cc.legalcode, legal_code))
+
+    # Victor - if policy has seeAlso copy info to cc:legalcode and remove it
+    for policy in g.subjects(RDF.type, odrl.Set):
+        legal_code = g.value(policy, RDFS.seeAlso)
+        g.add((policy, cc.legalcode, legal_code))
+        g.remove((policy, RDFS.seeAlso, legal_code))
+
     # Add to policy provenance information
     # Add prov:hadPrimarySource the initial policy IRI
     for policy in g.subjects(RDF.type, odrl.Set):
@@ -149,19 +178,29 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str) -> dict:
     return edc_licence_framed_json_ld
 
 
-def transform_licences(licences_id: list, folder_init: str, folder_added: str, prov_attribution_file: str):
-    for id in licences_id:
+def transform_licences(licences_id: list, folder_init: str, folder_added: str, prov_attribution_file: str, spdx_licences_id: dict):
+    # Read ttl file with provenance attribution
+    f = open('./{}'.format(prov_attribution_file), "r")
+    prov_attribution_text = f.read()
+    f.close()
+
+    for i, id in  enumerate(licences_id):
+        print(f'Transforming policy {id}')
         # Read ttl file with policy
         f = open(folder_init + '/{}.ttl'.format(id), "r")
         initial_policy = f.read()
         f.close()
 
-        # Read ttl file with provenance attribution
-        f = open('./{}'.format(prov_attribution_file), "r")
-        prov_attribution_text = f.read()
-        f.close()
+        spdx_policy = None
+        if spdx_licences_id is not None and id in spdx_licences_id:
+            # Read ttl file with respective SPDX policy
+            spdx_id = spdx_licences_id[id]
+            print(f'Open spdc file {spdx_id} for policy {id}')
+            f = open(folder_init + '/{}.ttl'.format(spdx_id), "r")
+            spdx_policy = f.read()
+            f.close()
 
-        transformed_policy = transform_licence_json_ld(initial_policy, prov_attribution_text)
+        transformed_policy = transform_licence_json_ld(initial_policy, prov_attribution_text, spdx_policy)
         # Write transformed license
         with open(folder_added + '/{}.json'.format(id), "w") as tranformed_file:
             tranformed_file.write(json.dumps(transformed_policy, indent=4))
@@ -198,6 +237,11 @@ if __name__ == "__main__":
     rdfLicense_licences_id = ast.literal_eval(config['DEFAULT']['rdfLicense_licences_id'])
     rdfLicense_attribution_file = config['DEFAULT']['rdfLicense_attribution_file']
 
+    spdx_id_rdfLicense = ast.literal_eval(config['DEFAULT']['spdx_id_rdfLicense'])
+    map_license_to_spdx = ast.literal_eval(config['DEFAULT']['map_license_to_spdx'])
+    print(map_license_to_spdx)
+    print(type(map_license_to_spdx))
+
     # Remove 1st argument from the
     # list of command line arguments
     argumentList = sys.argv[1:]
@@ -220,22 +264,27 @@ if __name__ == "__main__":
                 print('Retrieving standard lincences as ODRL representation')
                 retrieve_licences(dalicc_licences_id,
                                   config['DEFAULT']['folder_licences_init'],
-                                  True)
+                                  'DALICC')
                 retrieve_licences(rdfLicense_licences_id,
                                   config['DEFAULT']['folder_licences_init'],
-                                  False)
+                                  'Victor')
+                retrieve_licences(spdx_id_rdfLicense,
+                                  config['DEFAULT']['folder_licences_init'],
+                                  'SPDX')
             elif currentArgument in ("-t", "--Transform"):
                 # Transform from ttl to edc policy
                 print('Transforming to EDC policy representation')
-                transform_licences(dalicc_licences_id,
-                                   config['DEFAULT']['folder_licences_init'],
-                                   config['DEFAULT']['folder_licences_added'],
-                                   dalicc_attribution_file,
-                                   )
+                #transform_licences(dalicc_licences_id,
+                #                   config['DEFAULT']['folder_licences_init'],
+                #                   config['DEFAULT']['folder_licences_added'],
+                #                   dalicc_attribution_file,
+                #                   None
+                #                   )
                 transform_licences(rdfLicense_licences_id,
                                    config['DEFAULT']['folder_licences_init'],
                                    config['DEFAULT']['folder_licences_added'],
-                                   rdfLicense_attribution_file
+                                   rdfLicense_attribution_file,
+                                   map_license_to_spdx
                                    )
 
             elif currentArgument in ("-a", "--Add"):
