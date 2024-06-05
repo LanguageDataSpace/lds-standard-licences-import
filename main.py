@@ -206,9 +206,11 @@ def transform_licences(licences_id: list, folder_init: str, folder_added: str, p
             tranformed_file.write(json.dumps(transformed_policy, indent=4))
 
 
-def create_policy_on_lds_proxy(create_policy_url: str, licences_id: list, folder_added: str):
+def create_policy_on_lds_proxy(create_policy_url: str, suggest_licence_endpoint: str,
+                               licences_id: list, folder_added: str):
     notes = dict()
     for id in licences_id:
+        print(f'Working on policy {id}')
         # Read json-ld file with policy
         f = open(folder_added+'/{}.json'.format(id), "r")
         # Reading from file
@@ -216,12 +218,27 @@ def create_policy_on_lds_proxy(create_policy_url: str, licences_id: list, folder
         # Closing file
         f.close()
 
-        # Create policy on lds-edc connector
-        response = requests.post(create_policy_url, json=edc_policy)
-        if response.status_code == 200:
-            notes[id] = json.loads(response.text)['data']['@id']
-        else:
-            notes[id] = None
+        # Search if policy exists
+        print(f'Checking if policy {id} already exists')
+        title = edc_policy['edc:policy']['dct:title']['@value']
+        payload = {'title': title.split(' ')[0]}
+        response_licence = requests.get(suggest_licence_endpoint, params=payload)
+        found = False
+        if response_licence.status_code == requests.codes.ok:
+            for p_lic in response_licence.json():
+                if p_lic['title'] == title:
+                    print(f'Found at {p_lic["id"]}')
+                    found = True
+                    notes[id] = p_lic['id']
+                    break
+        if not found:
+            # Create policy on lds-edc connector
+            print(f'Creating policy {id}')
+            response = requests.post(create_policy_url, json=edc_policy)
+            if response.status_code == requests.codes.ok:
+                notes[id] = json.loads(response.text)['data']['@id']
+            else:
+                notes[id] = None
     return notes
 
 
@@ -230,6 +247,7 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
     config.read('config.ini')
     lds_proxy_create_policy_endpoint = config['DEFAULT']['create_policy_endpoint']
+    lds_proxy_suggest_policy_endpoint = config['DEFAULT']['suggest_licence_endpoint']
     notes = dict()
     dalicc_licences_id = ast.literal_eval(config['DEFAULT']['dalicc_licences_id'])
     dalicc_attribution_file = config['DEFAULT']['dalicc_attribution_file']
@@ -239,8 +257,6 @@ if __name__ == "__main__":
 
     spdx_id_rdfLicense = ast.literal_eval(config['DEFAULT']['spdx_id_rdfLicense'])
     map_license_to_spdx = ast.literal_eval(config['DEFAULT']['map_license_to_spdx'])
-    print(map_license_to_spdx)
-    print(type(map_license_to_spdx))
 
     # Remove 1st argument from the
     # list of command line arguments
@@ -274,12 +290,12 @@ if __name__ == "__main__":
             elif currentArgument in ("-t", "--Transform"):
                 # Transform from ttl to edc policy
                 print('Transforming to EDC policy representation')
-                #transform_licences(dalicc_licences_id,
-                #                   config['DEFAULT']['folder_licences_init'],
-                #                   config['DEFAULT']['folder_licences_added'],
-                #                   dalicc_attribution_file,
-                #                   None
-                #                   )
+                transform_licences(dalicc_licences_id,
+                                   config['DEFAULT']['folder_licences_init'],
+                                   config['DEFAULT']['folder_licences_added'],
+                                   dalicc_attribution_file,
+                                   None
+                                   )
                 transform_licences(rdfLicense_licences_id,
                                    config['DEFAULT']['folder_licences_init'],
                                    config['DEFAULT']['folder_licences_added'],
@@ -293,7 +309,9 @@ if __name__ == "__main__":
                 for section in config.sections():
                     connector_address = config[section]['connector_address']
                     connector_policy_endpoint = lds_proxy_create_policy_endpoint.format(connector_address)
+                    connector_suggest_policy_endpoint = lds_proxy_suggest_policy_endpoint.format(connector_address)
                     notes[connector_address] = create_policy_on_lds_proxy(connector_policy_endpoint,
+                                                                          connector_suggest_policy_endpoint,
                                                                           dalicc_licences_id+rdfLicense_licences_id,
                                                                           config['DEFAULT']['folder_licences_added']
                                                                           )
