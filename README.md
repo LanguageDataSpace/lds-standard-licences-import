@@ -30,7 +30,7 @@ Transformation involves:
      -  Add `prov:hadPrimarySource` the initial policy IRI
      -  Add `prov:wasAttributedTo` the appropriated Actor
         - Person :: Víctor Rodríguez Doncel
-        - Project :: DALICC - Data Licenses Clearance Center
+        - Organization :: DALICC - Data Licenses Clearance Center
   - Add `rdf:type odrl:Permission` if missing
   - Add `rdf:type odrl:Prohibition` if missing
   - Add `rdf:type odrl:Duty` if missing

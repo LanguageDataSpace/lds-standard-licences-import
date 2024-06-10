@@ -26,10 +26,10 @@ dalicc_frame = {
         "prov" : "http://www.w3.org/ns/prov#"
     },
     "@type": "odrl:Set",
-    "odrl:permission": {"@type": "odrl:Permission", "odrl:duty": {"@type": "odrl:Duty"}},
-    "odrl:prohibition": {"@type": "odrl:Prohibition", "odrl:remedy": {"@type": "odrl:Duty"}},
-    "odrl:obligation": {"@type": "odrl:Duty", "odrl:consequence": {"@type": "odrl:Duty"}},
-    "prov:wasAttributedTo": {},
+    "odrl:permission": {"@type": "odrl:Permission", "odrl:duty": {"@type": "odrl:Duty", "@omitDefault": "true"}},
+    "odrl:prohibition": {"@type": "odrl:Prohibition", "odrl:remedy": {"@type": "odrl:Duty", "@omitDefault": "true"}},
+    "odrl:obligation": {"@type": "odrl:Duty", "odrl:consequence": {"@type": "odrl:Duty", "@omitDefault": "true"}},
+    "prov:wasAttributedTo": {"@omitDefault": "true"},
 }
 
 
@@ -147,15 +147,6 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
     # Transform json-ld to framed json-ld (tree representation)
     data = json.loads(licence_jsonld_serialized)
     licence_framed_json_ld = pyld.jsonld.frame(data, dalicc_frame)
-
-    # Delete duties in permissions - due to error EDC
-    # TODO - remove in the future
-    if type(licence_framed_json_ld.get('odrl:permission')) == list:
-        for p in licence_framed_json_ld.get('odrl:permission'):
-            del p['odrl:duty']
-    elif type(licence_framed_json_ld.get('odrl:permission')) == dict:
-        p = licence_framed_json_ld.get('odrl:permission')
-        del p['odrl:duty']
 
     # Fix odrl:duty property between policy and duty to odrl:obligation
     if type(licence_framed_json_ld.get('odrl:duty')) == list:

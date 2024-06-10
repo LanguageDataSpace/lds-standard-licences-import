@@ -51,7 +51,21 @@
                 {
                     "@id": "cc:DerivativeWorks"
                 }
-            ]
+            ],
+            "odrl:duty": {
+                "@type": "odrl:Duty",
+                "odrl:action": [
+                    {
+                        "@id": "cc:Notice"
+                    },
+                    {
+                        "@id": "cc:ShareAlike"
+                    },
+                    {
+                        "@id": "cc:Attribution"
+                    }
+                ]
+            }
         },
         "odrl:prohibition": null,
         "prov:hadPrimarySource": {

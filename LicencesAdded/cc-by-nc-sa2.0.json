@@ -48,14 +48,27 @@
                 {
                     "@id": "cc:Reproduction"
                 }
-            ]
+            ],
+            "odrl:duty": {
+                "@type": "odrl:Duty",
+                "odrl:action": [
+                    {
+                        "@id": "cc:Notice"
+                    },
+                    {
+                        "@id": "cc:ShareAlike"
+                    },
+                    {
+                        "@id": "cc:Attribution"
+                    }
+                ]
+            }
         },
         "odrl:prohibition": {
             "@type": "odrl:Prohibition",
             "odrl:action": {
                 "@id": "cc:CommercialUse"
-            },
-            "odrl:remedy": null
+            }
         },
         "prov:hadPrimarySource": {
             "@id": "http://purl.org/NET/rdflicense/cc-by-nc-sa2.0"

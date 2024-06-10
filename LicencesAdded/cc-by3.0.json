@@ -50,7 +50,18 @@
                 {
                     "@id": "cc:Reproduction"
                 }
-            ]
+            ],
+            "odrl:duty": {
+                "@type": "odrl:Duty",
+                "odrl:action": [
+                    {
+                        "@id": "cc:Notice"
+                    },
+                    {
+                        "@id": "cc:Attribution"
+                    }
+                ]
+            }
         },
         "odrl:prohibition": null,
         "prov:hadPrimarySource": {

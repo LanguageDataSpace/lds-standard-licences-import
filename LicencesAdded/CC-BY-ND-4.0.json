@@ -85,13 +85,47 @@
                 "@type": "odrl:Permission",
                 "odrl:action": {
                     "@id": "odrl:distribute"
-                }
+                },
+                "odrl:duty": [
+                    {
+                        "@type": "odrl:Duty",
+                        "odrl:action": {
+                            "@id": "cc:Attribution"
+                        }
+                    },
+                    {
+                        "@type": "odrl:Duty",
+                        "odrl:action": {
+                            "@id": "cc:Notice"
+                        }
+                    }
+                ]
             },
             {
                 "@type": "odrl:Permission",
                 "odrl:action": {
                     "@id": "odrl:modify"
-                }
+                },
+                "odrl:duty": [
+                    {
+                        "@type": "odrl:Duty",
+                        "odrl:action": {
+                            "@id": "cc:Attribution"
+                        }
+                    },
+                    {
+                        "@type": "odrl:Duty",
+                        "odrl:action": {
+                            "@id": "cc:Notice"
+                        }
+                    },
+                    {
+                        "@type": "odrl:Duty",
+                        "odrl:action": {
+                            "@id": "dalicc:modificationNotice"
+                        }
+                    }
+                ]
             },
             {
                 "@type": "odrl:Permission",
@@ -105,22 +139,19 @@
                 "@type": "odrl:Prohibition",
                 "odrl:action": {
                     "@id": "odrl:derive"
-                },
-                "odrl:remedy": null
+                }
             },
             {
                 "@type": "odrl:Prohibition",
                 "odrl:action": {
                     "@id": "dalicc:ChangeLicense"
-                },
-                "odrl:remedy": null
+                }
             },
             {
                 "@type": "odrl:Prohibition",
                 "odrl:action": {
                     "@id": "dalicc:promote"
-                },
-                "odrl:remedy": null
+                }
             }
         ],
         "odrl:target": {
