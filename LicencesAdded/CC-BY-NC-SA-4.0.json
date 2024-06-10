@@ -134,6 +134,7 @@
         },
         "prov:wasAttributedTo": {
             "@type": [
+                "foaf:Organization",
                 "foaf:Agent",
                 "prov:Agent"
             ],

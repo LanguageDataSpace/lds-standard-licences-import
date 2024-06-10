@@ -116,7 +116,7 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
     # Add prov:wasAttributedTo the appropriated
     for policy in g.subjects(RDF.type, odrl.Set):
         # Agent
-        attribution_to_agent = g.subjects(RDF.type, FOAF.Agent)
+        attribution_to_agent = g.subjects(RDF.type, PROV.Agent)
         for agent in attribution_to_agent:
             g.add((policy, PROV.wasAttributedTo, agent))
     # Add rdf:type Permission if missing
@@ -156,6 +156,7 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
     elif type(licence_framed_json_ld.get('odrl:permission')) == dict:
         p = licence_framed_json_ld.get('odrl:permission')
         del p['odrl:duty']
+
     # Fix odrl:duty property between policy and duty to odrl:obligation
     if type(licence_framed_json_ld.get('odrl:duty')) == list:
         for d in licence_framed_json_ld.get('odrl:duty'):

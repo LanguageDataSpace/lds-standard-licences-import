@@ -58,7 +58,7 @@
         "prov:wasAttributedTo": {
             "@type": [
                 "foaf:Person",
-                "prov:Person",
+                "prov:Agent",
                 "foaf:Agent"
             ],
             "foaf:homepage": {
