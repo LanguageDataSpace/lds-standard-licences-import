@@ -105,8 +105,9 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
     # Victor - if policy has seeAlso copy info to cc:legalcode and remove it
     for policy in g.subjects(RDF.type, odrl.Set):
         legal_code = g.value(policy, RDFS.seeAlso)
-        g.add((policy, cc.legalcode, legal_code))
-        g.remove((policy, RDFS.seeAlso, legal_code))
+        if legal_code:
+            g.add((policy, cc.legalcode, legal_code))
+            g.remove((policy, RDFS.seeAlso, legal_code))
 
     # Add to policy provenance information
     # Add prov:hadPrimarySource the initial policy IRI
@@ -114,14 +115,10 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
         g.add((policy, PROV.hadPrimarySource, policy))
     # Add prov:wasAttributedTo the appropriated
     for policy in g.subjects(RDF.type, odrl.Set):
-        # Person
-        attribution_to_person = g.subjects(RDF.type, FOAF.Person)
-        for person in attribution_to_person:
-            g.add((policy, PROV.wasAttributedTo, person))
-        # Project
-        attribution_to_project = g.subjects(RDF.type, FOAF.Project)
-        for project in attribution_to_project:
-            g.add((policy, PROV.wasAttributedTo, project))
+        # Agent
+        attribution_to_agent = g.subjects(RDF.type, FOAF.Agent)
+        for agent in attribution_to_agent:
+            g.add((policy, PROV.wasAttributedTo, agent))
     # Add rdf:type Permission if missing
     for permission in g.objects(None, odrl.permission):
         if (permission, RDF.type, None) not in g:

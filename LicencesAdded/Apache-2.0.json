@@ -138,7 +138,7 @@
         },
         "prov:wasAttributedTo": {
             "@type": [
-                "foaf:Project",
+                "foaf:Agent",
                 "prov:Agent"
             ],
             "foaf:homepage": {

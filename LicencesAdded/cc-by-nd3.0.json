@@ -58,7 +58,8 @@
         "prov:wasAttributedTo": {
             "@type": [
                 "foaf:Person",
-                "prov:Person"
+                "prov:Person",
+                "foaf:Agent"
             ],
             "foaf:homepage": {
                 "@id": "http://www.cosasbuenas.es/"
