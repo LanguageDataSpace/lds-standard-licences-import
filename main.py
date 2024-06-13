@@ -6,24 +6,29 @@ import sys
 
 import pyld
 import requests
-from rdflib import Graph, Literal, RDF, Namespace, RDFS, DCTERMS, PROV, FOAF
+from rdflib import Graph, Literal, RDF, Namespace, RDFS, DCTERMS, PROV, FOAF, BNode, SKOS
 
 dalicc_frame = {
     "@context": {
+        "@vocab": "https://w3id.org/edc/v0.0.1/ns/",
+        "edc": "https://w3id.org/edc/v0.0.1/ns/",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "dcat": "http://www.w3.org/ns/dcat#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "foaf": "http://xmlns.com/foaf/0.1/",
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        "adms": "http://www.w3.org/ns/adms#",
+        "dcmitype": "http://purl.org/dc/dcmitype/",
+        "skos": "http://www.w3.org/2004/02/skos/core#",
+        "dct": "http://purl.org/dc/terms/",
+        "odrl": "http://www.w3.org/ns/odrl/2/",
+        "owl": "http://www.w3.org/2002/07/owl#",
         "cc": "http://creativecommons.org/ns#",
         "dalicc": "https://dalicc.net/ns#",
         "dalicclib": "https://dalicc.net/licenselibrary/",
-        "dcmitype": "http://purl.org/dc/dcmitype/",
-        "dcat": "http://www.w3.org/ns/dcat#",
-        "dct": "http://purl.org/dc/terms/",
-        "foaf": "http://xmlns.com/foaf/0.1/",
-        "odrl": "http://www.w3.org/ns/odrl/2/",
         "osl": "http://opensource.org/licenses/",
-        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-        "scho": "http://schema.org/",
-        "xsd": "http://www.w3.org/2001/XMLSchema#",
-        "prov" : "http://www.w3.org/ns/prov#"
+        "prov": "http://www.w3.org/ns/prov#",
+        "spdx": "http://spdx.org/rdf/terms#"
     },
     "@type": "odrl:Set",
     "odrl:permission": {"@type": "odrl:Permission", "odrl:duty": {"@type": "odrl:Duty", "@omitDefault": "true"}},
@@ -54,7 +59,7 @@ def retrieve_licences(licences_id: list, folder_init: str, source: str):
 
 
         # Write initial license
-        with open(folder_init + '/{}.ttl'.format(id), "w") as init_file:
+        with open(folder_init + '/{}_{}.ttl'.format(id, source), "w") as init_file:
             init_file.write(initial_policy)
 
 
@@ -75,13 +80,17 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
     # Bind the SPDX namespace to a prefix for more readable output
     spdx = Namespace('http://spdx.org/rdf/terms#')
     g.bind("spdx", spdx)
+    # Bind the ADMS namespace to a prefix for more readable output
+    adms = Namespace('http://www.w3.org/ns/adms#')
+    g.bind("adms", adms)
+
 
     # Replace odrl:Policy with odrl:Set
     for policy in g.subjects(RDF.type, odrl.Policy):
         g.add((policy, RDF.type, odrl.Set))
         g.remove((policy, RDF.type, odrl.Policy))
 
-    # Victor - Fix name,
+    # Victor - Fix name from SPDX licence
     for policy in g.subjects(RDF.type, odrl.Set):
         if (policy, RDFS.label, None) in g:
             init_title = g.value(policy, RDFS.label)
@@ -119,6 +128,7 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
         attribution_to_agent = g.subjects(RDF.type, PROV.Agent)
         for agent in attribution_to_agent:
             g.add((policy, PROV.wasAttributedTo, agent))
+
     # Add rdf:type Permission if missing
     for permission in g.objects(None, odrl.permission):
         if (permission, RDF.type, None) not in g:
@@ -140,6 +150,19 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
     for duty in g.objects(None, odrl.consequence):
         if (duty, RDF.type, None) not in g:
             g.add((duty, RDF.type, odrl.Duty))
+
+    # Add SPDX id as adms:identifier
+    # If respective spdx licence exists
+    for policy in g.subjects(RDF.type, odrl.Set):
+        if spdx_text is not None:
+            for spdx_policy in g.subjects(RDF.type, spdx.ListedLicense):
+                licenseId  = g.value(spdx_policy, spdx.licenseId)
+                adms_id = BNode()
+                g.add((adms_id, RDF.type, adms.Identifier))
+                g.add((adms_id, SKOS.notation, licenseId))
+                g.add((adms_id, adms.schemaAgency, Literal("SPDX")))
+                g.add((policy, adms.identifier, adms_id))
+
 
     # Serialize to json-ld
     licence_jsonld_serialized = g.serialize(format='json-ld')
@@ -163,11 +186,11 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
     context['edc'] = 'https://w3id.org/edc/v0.0.1/ns/'
     del licence_framed_json_ld['@context']
     edc_licence_framed_json_ld['@context'] = context
-    edc_licence_framed_json_ld['edc:policy'] = licence_framed_json_ld
+    edc_licence_framed_json_ld['policy'] = licence_framed_json_ld
     return edc_licence_framed_json_ld
 
 
-def transform_licences(licences_id: list, folder_init: str, folder_added: str, prov_attribution_file: str, spdx_licences_id: dict):
+def transform_licences(licences_id: list, folder_init: str, folder_added: str, source:str, prov_attribution_file: str, spdx_licences_id: dict):
     # Read ttl file with provenance attribution
     f = open('./{}'.format(prov_attribution_file), "r")
     prov_attribution_text = f.read()
@@ -176,23 +199,28 @@ def transform_licences(licences_id: list, folder_init: str, folder_added: str, p
     for i, id in  enumerate(licences_id):
         print(f'Transforming policy {id}')
         # Read ttl file with policy
-        f = open(folder_init + '/{}.ttl'.format(id), "r")
+        f = open(folder_init + '/{}_{}.ttl'.format(id, source), "r")
         initial_policy = f.read()
         f.close()
 
         spdx_policy = None
+        spdx_id = None
         if spdx_licences_id is not None and id in spdx_licences_id:
             # Read ttl file with respective SPDX policy
             spdx_id = spdx_licences_id[id]
             print(f'Open spdc file {spdx_id} for policy {id}')
-            f = open(folder_init + '/{}.ttl'.format(spdx_id), "r")
+            f = open(folder_init + '/{}_SPDX.ttl'.format(spdx_id), "r")
             spdx_policy = f.read()
             f.close()
 
         transformed_policy = transform_licence_json_ld(initial_policy, prov_attribution_text, spdx_policy)
         # Write transformed license
-        with open(folder_added + '/{}.json'.format(id), "w") as tranformed_file:
-            tranformed_file.write(json.dumps(transformed_policy, indent=4))
+        if spdx_id:
+            with open(folder_added + '/{}.json'.format(spdx_id), "w") as tranformed_file:
+                tranformed_file.write(json.dumps(transformed_policy, indent=4))
+        else:
+            with open(folder_added + '/{}.json'.format(id), "w") as tranformed_file:
+                tranformed_file.write(json.dumps(transformed_policy, indent=4))
 
 
 def create_policy_on_lds_proxy(create_policy_url: str, suggest_licence_endpoint: str,
@@ -282,12 +310,14 @@ if __name__ == "__main__":
                 transform_licences(dalicc_licences_id,
                                    config['DEFAULT']['folder_licences_init'],
                                    config['DEFAULT']['folder_licences_added'],
+                                   'DALICC',
                                    dalicc_attribution_file,
-                                   None
+                                   map_license_to_spdx
                                    )
                 transform_licences(rdfLicense_licences_id,
                                    config['DEFAULT']['folder_licences_init'],
                                    config['DEFAULT']['folder_licences_added'],
+                                   'Victor',
                                    rdfLicense_attribution_file,
                                    map_license_to_spdx
                                    )
