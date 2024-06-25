@@ -33,11 +33,23 @@
             "@id": "dalicclib:CC-BY-4.0"
         },
         "dct:alternative": [
-            "ODC PDDL",
-            "ODC PDDL 1.0",
-            "PDDL 1.0"
+            {
+                "@language": "en",
+                "@value": "ODC PDDL"
+            },
+            {
+                "@language": "en",
+                "@value": "ODC PDDL 1.0"
+            },
+            {
+                "@language": "en",
+                "@value": "PDDL 1.0"
+            }
         ],
-        "dct:publisher": "Open Data Commons",
+        "dct:publisher": {
+            "@language": "en",
+            "@value": "Open Data Commons"
+        },
         "dct:source": {
             "@id": "https://opendefinition.org/licenses/odc-pddl/"
         },

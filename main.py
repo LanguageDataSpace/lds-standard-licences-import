@@ -57,7 +57,6 @@ def retrieve_licences(licences_id: list, folder_init: str, source: str):
             response = requests.get(url.format(id))
             initial_policy = response.text
 
-
         # Write initial license
         with open(folder_init + '/{}_{}.ttl'.format(id, source), "w") as init_file:
             init_file.write(initial_policy)
@@ -84,7 +83,6 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
     adms = Namespace('http://www.w3.org/ns/adms#')
     g.bind("adms", adms)
 
-
     # Replace odrl:Policy with odrl:Set
     for policy in g.subjects(RDF.type, odrl.Policy):
         g.add((policy, RDF.type, odrl.Set))
@@ -104,11 +102,35 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
             else:
                 g.add((policy, DCTERMS.title, Literal(init_title, lang="en")))
 
-    # Victor - if policy.legalcode is Literal copy to dct:description and remove it
+    # DALICC - Update dct:alternative with 'en' lang string
+    for policy in g.subjects(RDF.type, odrl.Set):
+        for alternative in g.objects(policy, DCTERMS.alternative):
+            g.add((policy, DCTERMS.alternative, Literal(alternative, lang="en")))
+            g.remove((policy, DCTERMS.alternative, alternative))
+
+    # DALICC - Update  dct:publisher with 'en' lang string
+    for policy in g.subjects(RDF.type, odrl.Set):
+        for publisher in g.objects(policy, DCTERMS.publisher):
+            g.add((policy, DCTERMS.publisher, Literal(publisher, lang="en")))
+            g.remove((policy, DCTERMS.publisher, publisher))
+
+    # DALICC - Remove spdx:licenseId if exists
+    for policy in g.subjects(RDF.type, odrl.Set):
+        for spdx_id in g.objects(policy, spdx.licenseId):
+            g.remove((policy, spdx.licenseId, spdx_id))
+
+    # Add dct:description the spdx:licenseText
+    for policy in g.subjects(RDF.type, odrl.Set):
+        # If respective spdx licence exists
+        if spdx_text is not None:
+            for spdx_policy in g.subjects(RDF.type, spdx.ListedLicense):
+                description = g.value(spdx_policy, spdx.licenseText)
+                g.add((policy, DCTERMS.description, Literal(description, lang="en")))
+
+    # Victor - if policy cc:legalcode is Literal remove it
     for policy in g.subjects(RDF.type, odrl.Set):
         legal_code = g.value(policy, cc.legalcode)
         if isinstance(legal_code, Literal):
-            g.add((policy, DCTERMS.description, legal_code))
             g.remove((policy, cc.legalcode, legal_code))
 
     # Victor - if policy has seeAlso copy info to cc:legalcode and remove it
@@ -156,13 +178,12 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
     for policy in g.subjects(RDF.type, odrl.Set):
         if spdx_text is not None:
             for spdx_policy in g.subjects(RDF.type, spdx.ListedLicense):
-                licenseId  = g.value(spdx_policy, spdx.licenseId)
+                licenseId = g.value(spdx_policy, spdx.licenseId)
                 adms_id = BNode()
                 g.add((adms_id, RDF.type, adms.Identifier))
                 g.add((adms_id, SKOS.notation, licenseId))
                 g.add((adms_id, adms.schemaAgency, Literal("SPDX")))
                 g.add((policy, adms.identifier, adms_id))
-
 
     # Serialize to json-ld
     licence_jsonld_serialized = g.serialize(format='json-ld')
@@ -190,13 +211,14 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
     return edc_licence_framed_json_ld
 
 
-def transform_licences(licences_id: list, folder_init: str, folder_added: str, source:str, prov_attribution_file: str, spdx_licences_id: dict):
+def transform_licences(licences_id: list, folder_init: str, folder_added: str, source: str, prov_attribution_file: str,
+                       spdx_licences_id: dict):
     # Read ttl file with provenance attribution
     f = open('./{}'.format(prov_attribution_file), "r")
     prov_attribution_text = f.read()
     f.close()
 
-    for i, id in  enumerate(licences_id):
+    for i, id in enumerate(licences_id):
         print(f'Transforming policy {id}')
         # Read ttl file with policy
         f = open(folder_init + '/{}_{}.ttl'.format(id, source), "r")
@@ -229,7 +251,7 @@ def create_policy_on_lds_proxy(create_policy_url: str, suggest_licence_endpoint:
     for id in licences_id:
         print(f'Working on policy {id}')
         # Read json-ld file with policy
-        f = open(folder_added+'/{}'.format(id), "r")
+        f = open(folder_added + '/{}'.format(id), "r")
         # Reading from file
         edc_policy = json.loads(f.read())
         # Closing file
@@ -328,10 +350,11 @@ if __name__ == "__main__":
                 licences_id = []
                 from os import listdir
                 from os.path import isfile, join
+
                 licences_id = [f for f in listdir(config['DEFAULT']['folder_licences_added'])
-                                if isfile(join(config['DEFAULT']['folder_licences_added'], f)) and
-                                f != 'OdcPublicDomainDedicationAndLicence.json' and
-                                f != 'notes.json']
+                               if isfile(join(config['DEFAULT']['folder_licences_added'], f)) and
+                               f != 'OdcPublicDomainDedicationAndLicence.json' and
+                               f != 'notes.json']
                 print(licences_id)
                 # Add policies to connectors
                 print('Adding EDC policies to connectors')
@@ -346,7 +369,7 @@ if __name__ == "__main__":
                                                                           config['DEFAULT']['folder_licences_added']
                                                                           )
 
-                with open(config['DEFAULT']['folder_licences_added']+'/notes.json', "w") as notefile:
+                with open(config['DEFAULT']['folder_licences_added'] + '/notes.json', "w") as notefile:
                     notefile.write(json.dumps(notes, indent=4))
     except getopt.error as err:
         # output error, and return with an error code
