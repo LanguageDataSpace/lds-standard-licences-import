@@ -126,6 +126,9 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
             for spdx_policy in g.subjects(RDF.type, spdx.ListedLicense):
                 description = g.value(spdx_policy, spdx.licenseText)
                 g.add((policy, DCTERMS.description, Literal(description, lang="en")))
+        else:
+            description = g.value(policy, DCTERMS.title)
+            g.add((policy, DCTERMS.description, Literal(description, lang="en")))
 
     # Victor - if policy cc:legalcode is Literal remove it
     for policy in g.subjects(RDF.type, odrl.Set):
@@ -260,7 +263,10 @@ def create_policy_on_lds_proxy(create_policy_url: str, suggest_licence_endpoint:
         # Search if policy exists
         print(f'Checking if policy {id} already exists')
         title = edc_policy['policy']['dct:title']['@value']
-        payload = {'title': title.split(' ')[0]}
+        payload = {
+            'exact': 'true',
+            'title': title
+        }
         response_licence = requests.get(suggest_licence_endpoint, params=payload)
         found = False
         if response_licence.status_code == requests.codes.ok:

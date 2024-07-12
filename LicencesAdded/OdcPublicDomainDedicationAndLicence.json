@@ -46,6 +46,10 @@
                 "@value": "PDDL 1.0"
             }
         ],
+        "dct:description": {
+            "@language": "en",
+            "@value": "ODC Public Domain Dedication and Licence (PDDL)"
+        },
         "dct:publisher": {
             "@language": "en",
             "@value": "Open Data Commons"

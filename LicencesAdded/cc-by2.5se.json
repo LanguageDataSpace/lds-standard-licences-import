@@ -29,6 +29,10 @@
         "cc:legalcode": {
             "@id": "http://creativecommons.org/licenses/by/2.5/se/legalcode"
         },
+        "dct:description": {
+            "@language": "en",
+            "@value": "Creative Commons CC-BY 2.5 Sweden"
+        },
         "dct:hasVersion": "2.5",
         "dct:language": {
             "@id": "http://www.lexvo.org/page/iso629-2/swe"
