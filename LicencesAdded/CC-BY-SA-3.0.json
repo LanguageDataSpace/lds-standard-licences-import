@@ -47,8 +47,14 @@
         },
         "adms:identifier": {
             "@type": "adms:Identifier",
-            "skos:notation": "CC-BY-SA-3.0",
-            "adms:schemaAgency": "SPDX"
+            "skos:notation": {
+                "value": "CC-BY-SA-3.0",
+                "@type": "xsd:string"
+            },
+            "adms:schemaAgency": {
+                "@language": "en",
+                "@value": "SPDX"
+            }
         },
         "odrl:obligation": null,
         "odrl:permission": {

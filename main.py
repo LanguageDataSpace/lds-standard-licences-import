@@ -6,7 +6,8 @@ import sys
 
 import pyld
 import requests
-from rdflib import Graph, Literal, RDF, Namespace, RDFS, DCTERMS, PROV, FOAF, BNode, SKOS
+from rdflib import Graph, Literal, Namespace, BNode
+from rdflib.namespace import XSD, RDF, RDFS, DCTERMS, SKOS, FOAF, PROV
 
 dalicc_frame = {
     "@context": {
@@ -184,8 +185,8 @@ def transform_licence_json_ld(licence_text: str, attribution_text: str, spdx_tex
                 licenseId = g.value(spdx_policy, spdx.licenseId)
                 adms_id = BNode()
                 g.add((adms_id, RDF.type, adms.Identifier))
-                g.add((adms_id, SKOS.notation, licenseId))
-                g.add((adms_id, adms.schemaAgency, Literal("SPDX")))
+                g.add((adms_id, SKOS.notation, Literal(licenseId, datatype=XSD.string)))
+                g.add((adms_id, adms.schemaAgency, Literal("SPDX", lang="en")))
                 g.add((policy, adms.identifier, adms_id))
 
     # Serialize to json-ld
