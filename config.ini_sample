@@ -65,16 +65,5 @@ map_license_to_spdx = {
       }
 
 [connector_1]
-#connector_address = http://127.0.0.1:8081
-connector_address = http://ldssetup.ilsp.gr:8081
-edc_address = http://ldssetup.ilsp.gr:8181
+connector_address =  ADDRESS_TO_LDS_CONNECTOR
 
-
-[connector_2]
-connector_address = http://ldssetup.ilsp.gr:7081
-edc_address = http://ldssetup.ilsp.gr:7181
-
-[connector_3]
-connector_address = http://ldssetup.ilsp.gr:6081
-edc_address = http://ldssetup.ilsp.gr:6181
-#edc_address = http://ldssetup.ilsp.gr:8181/data/v2/policydefinitions/
