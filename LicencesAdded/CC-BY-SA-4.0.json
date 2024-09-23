@@ -95,10 +95,7 @@
         },
         "adms:identifier": {
             "@type": "adms:Identifier",
-            "skos:notation": {
-                "value": "CC-BY-SA-4.0",
-                "@type": "xsd:string"
-            },
+            "skos:notation": "CC-BY-SA-4.0",
             "adms:schemaAgency": {
                 "@language": "en",
                 "@value": "SPDX"

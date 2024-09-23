@@ -47,10 +47,7 @@
         },
         "adms:identifier": {
             "@type": "adms:Identifier",
-            "skos:notation": {
-                "value":"CC-BY-NC-SA-2.0",
-                "@type": "xsd:string"
-            },
+            "skos:notation": "CC-BY-NC-SA-2.0",
             "adms:schemaAgency": {
                 "@language": "en",
                 "@value": "SPDX"

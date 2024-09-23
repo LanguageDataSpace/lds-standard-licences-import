@@ -67,10 +67,7 @@
         },
         "adms:identifier": {
             "@type": "adms:Identifier",
-            "skos:notation": {
-                "@value": "Apache-2.0",
-                "@type": "xsd:string"
-            },
+            "skos:notation": "Apache-2.0",
             "adms:schemaAgency": {
                 "@language": "en",
                 "@value": "SPDX"

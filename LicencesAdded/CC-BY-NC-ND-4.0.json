@@ -99,10 +99,7 @@
         },
         "adms:identifier": {
             "@type": "adms:Identifier",
-            "skos:notation": {
-                "value":"CC-BY-NC-ND-4.0",
-                "@type": "xsd:string"
-            },
+            "skos:notation": "CC-BY-NC-ND-4.0",
             "adms:schemaAgency": {
                 "@language": "en",
                 "@value": "SPDX"

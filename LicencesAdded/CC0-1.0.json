@@ -71,10 +71,7 @@
         },
         "adms:identifier": {
             "@type": "adms:Identifier",
-            "skos:notation": {
-                "value": "CC0-1.0",
-                "@type": "xsd:string"
-            },
+            "skos:notation": "CC0-1.0",
             "adms:schemaAgency": {
                 "@language": "en",
                 "@value": "SPDX"
