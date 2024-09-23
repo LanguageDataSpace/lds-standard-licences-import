@@ -283,8 +283,10 @@ def create_policy_on_lds_proxy(create_policy_url: str, suggest_licence_endpoint:
             response = requests.post(create_policy_url, json=edc_policy)
             if response.status_code == requests.codes.ok:
                 notes[id] = json.loads(response.text)['data']['@id']
+                print(f'Policy created successfully with {id}')
             else:
                 notes[id] = response.text
+                print(f'Policy creation failed. Error: {response.text}')
     return notes
 
 
