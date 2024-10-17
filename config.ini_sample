@@ -1,68 +1,7 @@
 [DEFAULT]
 create_policy_endpoint = {}/api/v1/policy_definitions
-update_policy_endpoint = {}/data/v2/policydefinitions/
 suggest_licence_endpoint = {}/es/policies/suggest/
-folder_licences_init = LicencesInit
-folder_licences_added = LicencesAdded
-dalicc_licences_id = [
-        'Apache-2.0',
-        'Cc010Universal',
-        'CC-BY-4.0',
-        'CC-BY-ND-4.0',
-        'CC-BY-NC-4.0',
-        'CC-BY-SA-4.0',
-        'CC-BY-NC-ND-4.0',
-        'CC-BY-NC-SA-4.0',
-        'OdcPublicDomainDedicationAndLicence'
-        #'PublicDomain',
-        #'UnderPSI',
-                     ]
-dalicc_attribution_file = ProvenanceAttribution/DaliccProject.ttl
-rdfLicense_licences_id = [
-        'cc-by2.0',
-        'cc-by2.5se',
-        'cc-by3.0',
-        'cc-by-nd3.0',
-        'cc-by-nc-nd3.0',
-        'cc-by-nc-sa2.0',
-        'cc-by-nc-sa3.0',
-        'cc-by-sa3.0', ]
-rdfLicense_attribution_file = ProvenanceAttribution/VictorPerson.ttl
-
-spdx_id_rdfLicense = [
-      'CC-BY-2.0',
-      'CC-BY-3.0',
-      'CC-BY-ND-3.0',
-      'CC-BY-NC-ND-3.0',
-      'CC-BY-NC-SA-2.0',
-      'CC-BY-NC-SA-3.0',
-      'CC-BY-SA-3.0',
-      'Apache-2.0',
-      'CC0-1.0',
-      'CC-BY-4.0',
-      'CC-BY-ND-4.0',
-      'CC-BY-NC-4.0',
-      'CC-BY-SA-4.0',
-      'CC-BY-NC-ND-4.0',
-      'CC-BY-NC-SA-4.0', ]
-
-map_license_to_spdx = {
-      'cc-by2.0': 'CC-BY-2.0',
-      'cc-by3.0': 'CC-BY-3.0',
-      'cc-by-nd3.0': 'CC-BY-ND-3.0',
-      'cc-by-nc-nd3.0': 'CC-BY-NC-ND-3.0',
-      'cc-by-nc-sa2.0': 'CC-BY-NC-SA-2.0',
-      'cc-by-nc-sa3.0': 'CC-BY-NC-SA-3.0',
-      'cc-by-sa3.0': 'CC-BY-SA-3.0',
-      'Apache-2.0': 'Apache-2.0',
-      'Cc010Universal': 'CC0-1.0',
-      'CC-BY-4.0': 'CC-BY-4.0',
-      'CC-BY-ND-4.0': 'CC-BY-ND-4.0',
-      'CC-BY-NC-4.0': 'CC-BY-NC-4.0',
-      'CC-BY-SA-4.0': 'CC-BY-SA-4.0',
-      'CC-BY-NC-ND-4.0': 'CC-BY-NC-ND-4.0',
-      'CC-BY-NC-SA-4.0': 'CC-BY-NC-SA-4.0',
-      }
+folder_licences_added = LicencesToAdd
 
 [connector_1]
 connector_address =  ADDRESS_TO_LDS_CONNECTOR
