@@ -1,6 +1,12 @@
 A script that adds EDC policy representations of standard licences into an LDS-Connector v0.7.0.
 
 # Add standard licences into LDS-EDC
+## Install requirements
+1) Create in a console a python virtual environment using at least python 3.8 `python -m venv venv` 
+2) Activate python virtual environment `source venv/bin/activate`
+3) Install requirement `pip install -r requirements.txt`
+
+## Update Configuration 
 In order to add EDC policy representations from standard licences to your LDS-ECD, 
 1) copy `cp config.ini_sample config.ini`
 2) set the LDS-EDC address of the `config.ini` file at the variable `connector_address`. 
@@ -29,7 +35,6 @@ licences (found in folder LicencesToAdd) within your LDS connector:
 * CC-BY-2.0
 * PublicDomain
 
-Leave the rest of the information without any changes.
-## Use ::
+## Run script ::
 `python main.py`
 
