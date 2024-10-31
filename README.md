@@ -1,4 +1,6 @@
-A script that adds EDC policy representations of standard licences into an LDS-Connector v0.7.0.
+A script that adds EDC policy representations of standard licences into an LDS-Connector.
+
+**Compatibility Notice:** This version of the code works with LDS-Connector version 0.7.0 and any versions above it. It is stable until new releases are introduced.
 
 # Add standard licences into LDS-EDC
 ## Install requirements
