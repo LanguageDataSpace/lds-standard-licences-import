@@ -1,20 +1,32 @@
 A script that adds EDC policy representations of standard licences into an LDS-Connector.
 
-**Compatibility Notice:** This version of the code works with LDS-Connector version 0.7.0 and any versions above it. It is stable until new releases are introduced.
+**Compatibility Notice:** This version of the code works with LDS-Connector version 0.8.0 and any versions above it. 
+It is stable until new releases are introduced.
 
 # Add standard licences into LDS-EDC
 ## Install requirements
-1) Create in a console a python virtual environment using at least python 3.8 `python -m venv venv` 
+1) Create a python virtual environment using at least python 3.8 `python3 -m venv venv` 
 2) Activate python virtual environment `source venv/bin/activate`
 3) Install requirement `pip install -r requirements.txt`
 
 ## Update Configuration 
 In order to add EDC policy representations from standard licences to your LDS-ECD, 
-1) copy `cp config.ini_sample config.ini`
-2) set the LDS-EDC address of the `config.ini` file at the variable `connector_address`. 
+copy `cp config.ini_sample config.ini` and at the `config.ini` file set the following
+information:
+1) the LDS-EDC address at the variable `connector_address`, 
+2) the Keycloak address at the variable `keycloak_address`,
+3) the keycloak client_id at the variable `client_id`,
+4) the keycloak client_secret at the variable `client_secret`,
+5) the username of the user with connector admin role at the variable `username` and
+6) the password of the user with connector admin role at the variable `password`.
 ```
 [connector_1]
-connector_address = ADDRESS_TO_LDS_CONNECTOR
+connector_address =  ADDRESS_TO_LDS_CONNECTOR
+keycloak_address = ADDRESS_TO_KEYCLOAK
+client_id = KEYCLOAK_CLIENT_ID
+client_secret = KEYCLOAK_CLIENT_SECRET
+username = USERNAME_WITH_CONNECTOR_ADMIN_ROLE
+password = PASSWORD_WITH_CONNECTOR_ADMIN_ROLE
 ```
 Leave the rest of the information within the config file unchanged. This action will add the following standard 
 licences (found in folder LicencesToAdd) within your LDS connector:  
@@ -38,5 +50,5 @@ licences (found in folder LicencesToAdd) within your LDS connector:
 * PublicDomain
 
 ## Run script ::
-`python main.py`
+`python3 main.py`
 

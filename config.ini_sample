@@ -5,11 +5,11 @@ get_token_endpoint = {}:8040/realms/LDS/protocol/openid-connect/token
 folder_licences_added = LicencesToAdd
 
 [connector_1]
-connector_address =  IP_TO_LDS_PROXY
-keycloak_address = IP_TO_KEYCLOAK
-client_id = client_id
-client_secret = client_secret
-username = connector_admin_username
-password = connector_admin_password
+connector_address =  ADDRESS_TO_LDS_CONNECTOR
+keycloak_address = ADDRESS_TO_KEYCLOAK
+client_id = KEYCLOAK_CLIENT_ID
+client_secret = KEYCLOAK_CLIENT_SECRET
+username = USERNAME_WITH_CONNECTOR_ADMIN_ROLE
+password = PASSWORD_WITH_CONNECTOR_ADMIN_ROLE
 
 
