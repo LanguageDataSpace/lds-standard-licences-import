@@ -15,15 +15,13 @@ copy `cp config.ini_sample config.ini` and at the `config.ini` file set the foll
 information:
 1) the LDS-EDC address at the variable `connector_address`, 
 2) the Keycloak address at the variable `keycloak_address`,
-3) the keycloak client_id at the variable `client_id`,
-4) the keycloak client_secret at the variable `client_secret`,
-5) the username of the user with connector admin role at the variable `username` and
-6) the password of the user with connector admin role at the variable `password`.
+3) the keycloak client_secret at the variable `client_secret` for the keycloak client connector-1-proxy,
+4) the username of the user with connector admin role at the variable `username` and
+5) the password of the user with connector admin role at the variable `password`.
 ```
 [connector_1]
 connector_address =  ADDRESS_TO_LDS_CONNECTOR
 keycloak_address = ADDRESS_TO_KEYCLOAK
-client_id = KEYCLOAK_CLIENT_ID
 client_secret = KEYCLOAK_CLIENT_SECRET
 username = USERNAME_WITH_CONNECTOR_ADMIN_ROLE
 password = PASSWORD_WITH_CONNECTOR_ADMIN_ROLE

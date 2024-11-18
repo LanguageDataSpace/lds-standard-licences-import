@@ -2,12 +2,12 @@
 create_policy_endpoint = {}/api/v1/policy_definitions
 suggest_licence_endpoint = {}/es/policies/suggest/
 get_token_endpoint = {}:8040/realms/LDS/protocol/openid-connect/token
+client_id = connector-1-proxy
 folder_licences_added = LicencesToAdd
 
 [connector_1]
 connector_address =  ADDRESS_TO_LDS_CONNECTOR
 keycloak_address = ADDRESS_TO_KEYCLOAK
-client_id = KEYCLOAK_CLIENT_ID
 client_secret = KEYCLOAK_CLIENT_SECRET
 username = USERNAME_WITH_CONNECTOR_ADMIN_ROLE
 password = PASSWORD_WITH_CONNECTOR_ADMIN_ROLE

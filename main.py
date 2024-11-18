@@ -34,7 +34,6 @@ def create_policy_on_lds_proxy(create_policy_url: str, suggest_licence_endpoint:
             'title': title
         }
         license_headers = {
-            'x-api-key': 'password',
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {access_token}'
         }
@@ -87,7 +86,7 @@ if __name__ == "__main__":
         get_token_payload = dict()
         get_token_payload['username'] = config[section]['username']
         get_token_payload['password'] = config[section]['password']
-        get_token_payload['client_id'] = config[section]['client_id']
+        get_token_payload['client_id'] = config['DEFAULT']['client_id']
         get_token_payload['client_secret'] = config[section]['client_secret']
         get_token_payload['grant_type'] = 'password'
 
