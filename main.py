@@ -1,21 +1,31 @@
 import configparser
 import json
-from http import HTTPStatus
 import requests
+
+
+def get_update_token(connector_keycloak_endpoint: str, get_token_payload: dict):
+    try:
+        response_auth = requests.post(connector_keycloak_endpoint, data=get_token_payload)
+        response_auth.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        raise SystemExit(err)
+    if response_auth.status_code != requests.codes.ok:
+        print(f'Error occured during getting token: {response_auth}')
+        return None
+    # Get access_token and refresh_token
+    access_token = response_auth.json()['access_token']
+    license_headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {access_token}'
+    }
+    return license_headers
 
 
 def create_policy_on_lds_proxy(create_policy_url: str, suggest_licence_endpoint: str,
                                connector_keycloak_endpoint: str,
                                get_token_payload: dict,
                                licences_id: list, folder_added: str):
-
-    response_auth = requests.post(connector_keycloak_endpoint, data=get_token_payload)
-    if response_auth.status_code != requests.codes.ok:
-        print(f'Error occured during getting token: {response_auth}')
-        return
-    # Get access_token and refresh_token
-    access_token = response_auth.json()['access_token']
-    refresh_token = response_auth.json()['refresh_token']
+    license_headers = get_update_token(connector_keycloak_endpoint, get_token_payload)
     notes = dict()
     for id in licences_id:
         print(f'Working on policy {id}')
@@ -33,11 +43,13 @@ def create_policy_on_lds_proxy(create_policy_url: str, suggest_licence_endpoint:
             'exact': 'true',
             'title': title
         }
-        license_headers = {
-            'Content-Type': 'application/json',
-            'Authorization': f'Bearer {access_token}'
-        }
         response_licence_search = requests.get(suggest_licence_endpoint, headers=license_headers, params=license_params)
+        if response_licence_search.status_code == requests.codes.unauthorized and \
+                json.loads(response_licence_search.content)[
+                    'message'].casefold() == 'Invalid or Expired token.'.casefold():
+            license_headers = get_update_token(connector_keycloak_endpoint, get_token_payload)
+            response_licence_search = requests.get(suggest_licence_endpoint, headers=license_headers,
+                                                   params=license_params)
         found = False
         if response_licence_search.status_code == requests.codes.ok:
             for p_lic in response_licence_search.json()['data']:
@@ -50,6 +62,10 @@ def create_policy_on_lds_proxy(create_policy_url: str, suggest_licence_endpoint:
             # Create policy on lds-edc connector
             print(f'Creating policy {id}')
             response_licence_create = requests.post(create_policy_url, headers=license_headers, json=edc_policy)
+            if response_licence_create.status_code == requests.codes.unauthorized and \
+                json.loads(response_licence_create.content)['message'].casefold() == 'Invalid or Expired token.'.casefold():
+                license_headers = get_update_token(connector_keycloak_endpoint, get_token_payload)
+                response_licence_create = requests.post(create_policy_url, headers=license_headers, json=edc_policy)
             if response_licence_create.status_code == requests.codes.ok:
                 notes[id] = json.loads(response_licence_create.text)['data']['@id']
                 print(f'Policy created successfully with {id}')
